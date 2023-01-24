@@ -1,4 +1,4 @@
-from QGraphViz.DotParser.DotParser import DotParser
-from QGraphViz.DotParser.Graph import Graph, GraphType
-from QGraphViz.DotParser.Node import Node
-from QGraphViz.DotParser.Edge import Edge
+from QGraphViz.QGraphViz.DotParser.DotParser import DotParser
+from QGraphViz.QGraphViz.DotParser.Graph import Graph, GraphType
+from QGraphViz.QGraphViz.DotParser.Node import Node
+from QGraphViz.QGraphViz.DotParser.Edge import Edge

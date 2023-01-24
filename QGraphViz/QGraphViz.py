@@ -13,7 +13,7 @@ import os
 import sys
 import enum
 import datetime
-from QGraphViz.DotParser import DotParser, Node, Edge, Graph, GraphType
+from QGraphViz.QGraphViz.DotParser import DotParser, Node, Edge, Graph, GraphType
 import math
 
 

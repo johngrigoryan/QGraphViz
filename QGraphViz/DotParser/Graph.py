@@ -7,8 +7,8 @@ Description:
 Grapph object
 """
 import enum
-from QGraphViz.DotParser.Node import Node
-from QGraphViz.DotParser.Edge import Edge
+from QGraphViz.QGraphViz.DotParser.Node import Node
+from QGraphViz.QGraphViz.DotParser.Edge import Edge
 
 class GraphType(enum.Enum):
     SimpleGraph=0
