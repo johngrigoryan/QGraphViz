@@ -436,8 +436,10 @@ class QGraphViz_Core(QWidget):
             x = event.x()
             y = event.y()
             if (self.manipulation_mode == QGraphVizManipulationMode.Nodes_Move_Mode):
-                self.selected_Node.pos[0] += x - self.current_pos[0]
-                self.selected_Node.pos[1] += y - self.current_pos[1]
+                if self.selected_Node.pos[0] + x - self.current_pos[0] > self.selected_Node.size[0] // 2:
+                    self.selected_Node.pos[0] += x - self.current_pos[0]
+                if self.selected_Node.pos[1] + y - self.current_pos[1] > self.selected_Node.size[1] // 2:
+                    self.selected_Node.pos[1] += y - self.current_pos[1]
 
             self.current_pos = [x, y]
             self.repaint()
