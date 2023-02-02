@@ -624,6 +624,8 @@ class QGraphViz_Core(QWidget):
 
             if edge.kwargs.get("dashed"):
                 pen.setStyle(Qt.DashLine)
+            else:
+                pen.setStyle(Qt.SolidLine)
 
             painter.setPen(pen)
             painter.setBrush(brush)
