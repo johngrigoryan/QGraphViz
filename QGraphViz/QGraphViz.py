@@ -7,8 +7,9 @@ Description:
 Main Class to QGraphViz tool
 """
 from PyQt5.QtWidgets import QApplication, QWidget, QScrollArea, QSizePolicy, QShortcut
-from PyQt5.QtGui import QPainter, QPen, QBrush, QColor, QPainterPath, QImage, QLinearGradient, QPolygonF, QKeySequence
-from PyQt5.QtCore import Qt, QRect, QPoint, QLineF, QPointF, pyqtSlot
+from PyQt5.QtGui import QPainter, QPen, QBrush, QColor, QPainterPath, QImage, QLinearGradient, QPolygonF, QKeySequence, \
+    QFontMetrics
+from PyQt5.QtCore import Qt, QRect, QPoint, QLineF, QPointF
 import os
 import sys
 import enum
@@ -912,6 +913,7 @@ class QGraphViz_Core(QWidget):
 
         old_font_size = self.engine.font.pointSizeF()
         self.engine.font.setPointSizeF(old_font_size * 1.25)
+        self.engine.fm = QFontMetrics(self.engine.font)
         self.repaint()
 
     def zoom_out(self):
@@ -923,6 +925,7 @@ class QGraphViz_Core(QWidget):
 
         old_font_size = self.engine.font.pointSizeF()
         self.engine.font.setPointSizeF(old_font_size / 1.25)
+        self.engine.fm = QFontMetrics(self.engine.font)
         self.repaint()
 
     def updateSize(self):
