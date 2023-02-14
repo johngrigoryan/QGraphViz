@@ -302,8 +302,10 @@ class DotParser():
                 self.populate_file(graph, "->", fi)
                 fi.write("}")
 
-    def toJSON(self, filename, graph):
-        graph_dic = graph.toDICT()
+    def toJSON(self, filename, engine):
+        graph_dic = engine.graph.toDICT()
+        font = engine.font.pointSizeF()
+        graph_dic['font'] = font
         with open(filename, 'w') as fp:
             json.dump(graph_dic, fp, indent=4)
 

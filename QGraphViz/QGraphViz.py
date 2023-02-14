@@ -6,9 +6,9 @@ Author: Saifeddine ALOUI
 Description:
 Main Class to QGraphViz tool
 """
-from PyQt5.QtWidgets import QApplication, QWidget, QScrollArea, QSizePolicy
-from PyQt5.QtGui import QPainter, QPen, QBrush, QColor, QPainterPath, QImage, QLinearGradient, QPolygonF
-from PyQt5.QtCore import Qt, QRect, QPoint, QLineF, QPointF
+from PyQt5.QtWidgets import QApplication, QWidget, QScrollArea, QSizePolicy, QShortcut
+from PyQt5.QtGui import QPainter, QPen, QBrush, QColor, QPainterPath, QImage, QLinearGradient, QPolygonF, QKeySequence
+from PyQt5.QtCore import Qt, QRect, QPoint, QLineF, QPointF, pyqtSlot
 import os
 import sys
 import enum
@@ -120,6 +120,11 @@ class QGraphViz_Core(QWidget):
         self.setAutoFillBackground(True)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setMouseTracking(True)
+        zoom_in_shortcut = QShortcut(QKeySequence(QKeySequence.ZoomIn), self)
+        zoom_in_shortcut.activated.connect(self.zoom_in)
+
+        zoom_out_shortcut = QShortcut(QKeySequence(QKeySequence.ZoomOut), self)
+        zoom_out_shortcut.activated.connect(self.zoom_out)
 
     # =================== Exposed methods =======================
 
@@ -175,12 +180,12 @@ class QGraphViz_Core(QWidget):
 
     def addEdge(self, source, dest, kwargs):
         """
-        Connects two nodes from the same subgraph or 
+        Connects two nodes from the same subgraph or
         from two different subgraphs
         If source and dest nodes belong to the same
         Subgraph, the connection added to the subgraph
         if the connection is between different subgraph notes
-        the connection is added to the main subgraph 
+        the connection is added to the main subgraph
         """
         edge = Edge(source, dest)
         edge.kwargs = kwargs
@@ -294,7 +299,7 @@ class QGraphViz_Core(QWidget):
         self.engine.current_path = filename
 
     def saveAsJson(self, filename):
-        self.parser.toJSON(filename, self.engine.graph)
+        self.parser.toJSON(filename, self.engine)
         self.engine.current_path = filename
 
     # ================== Helper methods ==================
@@ -436,8 +441,10 @@ class QGraphViz_Core(QWidget):
             x = event.x()
             y = event.y()
             if (self.manipulation_mode == QGraphVizManipulationMode.Nodes_Move_Mode):
-                self.selected_Node.pos[0] += x - self.current_pos[0]
-                self.selected_Node.pos[1] += y - self.current_pos[1]
+                if self.selected_Node.pos[0] + x - self.current_pos[0] > self.selected_Node.size[0] // 2:
+                    self.selected_Node.pos[0] += x - self.current_pos[0]
+                if self.selected_Node.pos[1] + y - self.current_pos[1] > self.selected_Node.size[1] // 2:
+                    self.selected_Node.pos[1] += y - self.current_pos[1]
 
             self.current_pos = [x, y]
             self.repaint()
@@ -622,6 +629,8 @@ class QGraphViz_Core(QWidget):
 
             if edge.kwargs.get("dashed"):
                 pen.setStyle(Qt.DashLine)
+            else:
+                pen.setStyle(Qt.SolidLine)
 
             painter.setPen(pen)
             painter.setBrush(brush)
@@ -893,6 +902,28 @@ class QGraphViz_Core(QWidget):
                                        point_end_y=self.current_pos[1])
             painter.setPen(bkp)
             painter.end()
+
+    def zoom_in(self):
+        for node in self.engine.graph.nodes:
+            if 'size' in node.kwargs.keys():
+                size = node.kwargs['size']
+                node.kwargs['size'] = [size[0] * 1.25, size[1] * 1.25]
+            node.size = [node.size[0] * 1.25, node.size[1] * 1.25]
+
+        old_font_size = self.engine.font.pointSizeF()
+        self.engine.font.setPointSizeF(old_font_size * 1.25)
+        self.repaint()
+
+    def zoom_out(self):
+        for node in self.engine.graph.nodes:
+            if 'size' in node.kwargs.keys():
+                size = node.kwargs['size']
+                node.kwargs['size'] = [size[0] / 1.25, size[1] / 1.25]
+            node.size = [node.size[0] / 1.25, node.size[1] / 1.25]
+
+        old_font_size = self.engine.font.pointSizeF()
+        self.engine.font.setPointSizeF(old_font_size / 1.25)
+        self.repaint()
 
     def updateSize(self):
         x, y, w, h = self.getRect_Size()
