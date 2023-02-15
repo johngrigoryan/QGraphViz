@@ -910,6 +910,10 @@ class QGraphViz_Core(QWidget):
                 size = node.kwargs['size']
                 node.kwargs['size'] = [size[0] * 1.25, size[1] * 1.25]
             node.size = [node.size[0] * 1.25, node.size[1] * 1.25]
+            if 'pos' in node.kwargs.keys():
+                pos = node.kwargs['pos']
+                node.kwargs['pos'] = [pos[0] * 1.25, pos[1] * 1.25]
+            node.pos = [node.pos[0] * 1.25, node.pos[1] * 1.25]
 
         old_font_size = self.engine.font.pointSizeF()
         self.engine.font.setPointSizeF(old_font_size * 1.25)
@@ -922,6 +926,10 @@ class QGraphViz_Core(QWidget):
                 size = node.kwargs['size']
                 node.kwargs['size'] = [size[0] / 1.25, size[1] / 1.25]
             node.size = [node.size[0] / 1.25, node.size[1] / 1.25]
+            if 'pos' in node.kwargs.keys():
+                pos = node.kwargs['pos']
+                node.kwargs['pos'] = [pos[0] / 1.25, pos[1] / 1.25]
+            node.pos = [node.pos[0] / 1.25, node.pos[1] / 1.25]
 
         old_font_size = self.engine.font.pointSizeF()
         self.engine.font.setPointSizeF(old_font_size / 1.25)
