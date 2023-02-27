@@ -940,8 +940,8 @@ class QGraphViz_Core(QWidget):
         x, y, w, h = self.getRect_Size()
         w = x + w
         h = y + h
-        self.setMinimumWidth(w)
-        self.setMinimumHeight(h)
+        self.setMinimumWidth(int(w) + 1)
+        self.setMinimumHeight(int(h) + 1)
         if (self.parent is not None):
             if (self.minimumWidth() < self.parent().width()):
                 self.setMinimumWidth(self.parent().width())
