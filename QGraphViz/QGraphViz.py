@@ -206,10 +206,10 @@ class QGraphViz_Core(QWidget):
 
     def removeNode(self, node):
         graph = node.parent_graph
-        if (node in graph.nodes):
+        if node in graph.nodes:
             idx = graph.nodes.index(node)
             node = graph.nodes[idx]
-            if (self.node_removed_callback is not None):
+            if self.node_removed_callback is not None:
                 self.node_removed_callback(node)
             for edge in node.in_edges:
                 try:
@@ -229,7 +229,7 @@ class QGraphViz_Core(QWidget):
 
             for edge in node.out_edges:
                 try:
-                    del edge.source.out_edges[edge.source.out_edges.index(edge)]
+                    del edge.source.in_edges[edge.source.in_edges.index(edge)]
                 except:
                     pass
                 if edge.source.parent_graph == edge.dest.parent_graph:
